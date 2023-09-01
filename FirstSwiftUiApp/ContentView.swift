@@ -12,30 +12,53 @@ struct ContentView: View {
         VStack{
             HStack{
                 VStack(alignment: .leading) {
-                    Text("Nightly Tasks")
-                        .font(.title3)
-                        .foregroundColor(.blue)
-                        .fontWeight(.heavy)
-                        .textCase(.uppercase)
+                    HStack{
+                        Text(Image(systemName: "moon.stars.circle"))
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                            .fontWeight(.bold)
+                        Text("Nightly Tasks")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                            .fontWeight(.heavy)
+                            .textCase(.uppercase)
+                    }
+                    
                     Text("Check all doors")
                     Text("Check that the safe is locked")
                     Text("Check the mailbox")
                     Text("Inspect security cameras")
                     Text("Clear ice from sidewalks")
                     Text("Document \"strange and unusual\" occurrences")
-                    Text("WEEKLY TASKS")
-                        .font(.title3)
-                        .foregroundColor(.blue)
-                        .fontWeight(.heavy)
-                        .padding(.top)
-                        .textCase(.uppercase)
+                    
+                    HStack (alignment:.bottom){
+                        Text(Image(systemName: "sunset"))
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                            .fontWeight(.bold)
+                        
+                        Text("WEEKLY TASKS")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                            .fontWeight(.heavy)
+                            .padding(.top)
+                            .textCase(.uppercase)
+                    }
                     Text("Check inside all vacant rooms")
-                    Text("Monthly Tasks")
-                        .font(.title3)
-                        .foregroundColor(.blue)
-                        .fontWeight(.heavy)
-                        .padding(.top)
-                        .textCase(.uppercase)
+                    
+                    HStack(alignment:.bottom){
+                        Text(Image(systemName:"calendar"))
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                            .fontWeight(.bold)
+                        
+                        Text("Monthly Tasks")
+                            .font(.title3)
+                            .foregroundColor(.blue)
+                            .fontWeight(.heavy)
+                            .padding(.top)
+                            .textCase(.uppercase)
+                    }
                 }
                 .padding([.top, .leading])
                 .foregroundColor(/*@START_MENU_TOKEN@*/.gray/*@END_MENU_TOKEN@*/)
@@ -45,6 +68,8 @@ struct ContentView: View {
         }
     }
 }
+
+
 
 /*
 struct SpaceLayuout : View {
