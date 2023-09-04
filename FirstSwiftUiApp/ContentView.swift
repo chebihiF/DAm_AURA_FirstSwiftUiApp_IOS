@@ -22,46 +22,37 @@ let monthlyTasks = ["Test security alarm","Test motion detectors","Test smoke al
 
 struct ContentView: View {
     var body: some View {
-        VStack {
+        NavigationView {
             List{
-                Section(header:
-                            HStack{
-                    Text(Image(systemName: "moon.stars.circle"))
-                    Text("Nightly Tasks")
-                }.font(.title2)
+                Section(header:TaskSectionHeader(symbolSystemName: "moon.stars.circle", headerText: "Nightly Tasks")
                 ){
                     ForEach(nightlyTasks,id: \.self ,content: {
                         taskName in
-                        Text(taskName)
+                        NavigationLink(taskName, destination: DetailsView(taskName: taskName) )
                     })
                 }
                 
-                Section(header:
-                            HStack{
-                    Text(Image(systemName: "sunset"))
-                    Text("WEEKLY TASKS")
-                }.font(.title2)
-                ){
+                Section(header: TaskSectionHeader(symbolSystemName: "sunset", headerText: "WEEKLY TASKS")){
                     ForEach(weeklyTasks,id: \.self ,content: {
                         taskName in
-                        Text(taskName)
+                        NavigationLink(taskName, destination: DetailsView(taskName: taskName))
                     })
                 }
                 
-                Section(header:
-                            HStack{
-                    Text(Image(systemName: "calendar"))
-                    Text("Monthly Tasks")
-                }.font(.title2)){
+                Section(header:TaskSectionHeader(symbolSystemName: "calendar", headerText: "Monthly Tasks")){
                     ForEach(monthlyTasks,id: \.self ,content: {
                         taskName in
-                        Text(taskName)
+                        NavigationLink(taskName, destination: DetailsView(taskName: taskName))
                     })
                 }
             }
+            .listStyle(GroupedListStyle())
+            .navigationTitle("Home")
         }
     }
 }
+
+
 
 struct ContentListView : View {
     var body: some View {
@@ -78,44 +69,33 @@ struct ContentListView : View {
     }
 }
 
-/*
- struct SpaceLayuout : View {
- var body: some View {
- VStack{
- Circle()
- Rectangle()
- HStack {
- Circle()
- Text("Test")
- }
- }
- }
- }
- 
- 
- struct LayoutManager: View {
- var body: some View {
- VStack {
- Circle()
- Rectangle()
- HStack {
- RoundedRectangle(cornerRadius: 25.0)
- Text("Hello World")
- VStack {
- Circle()
- Rectangle()
- Circle()
- }
- }
- }
- }
- }
- */
-
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentListView()
+        ContentView()
     }
 }
 
+//"moon.stars.circle"
+// "Nightly Tasks"
+
+struct TaskSectionHeader: View {
+    var symbolSystemName: String
+    var headerText: String
+    var body: some View {
+        HStack{
+            Text(Image(systemName: symbolSystemName))
+            Text(headerText)
+        }.font(.title2)
+    }
+}
+
+struct DetailsView: View {
+    let taskName: String
+    var body: some View {
+        VStack{
+            Text(taskName)
+            Text("Placeholder for task description")
+            Text("Placeholder for complete button")
+        }
+    }
+}
