@@ -7,16 +7,8 @@
 
 import Foundation
 
-class Task : ObservableObject { 
-    
+struct Task {
     let name: String
-    @Published var isComplete: Bool // can use it in external struct/class
+    var isComplete: Bool
     var lastCompleted: Date?
-    
-    // constructeur 
-    internal init(name: String, isComplete: Bool, lastCompleted: Date? = nil) {
-        self.name = name
-        self.isComplete = isComplete
-        self.lastCompleted = lastCompleted
-    }
 }
