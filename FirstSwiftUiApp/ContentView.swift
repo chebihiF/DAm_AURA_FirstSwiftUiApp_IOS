@@ -54,7 +54,7 @@ struct ContentView: View {
 
 
 struct TestView : View {
-    @StateObject var theTask = Task(name: "check all windows", isComplete: false)
+    @EnvironmentObject var theTask : Task
     var body: some View {
        /* TabView{ // Destination.Label
             DetailsView(taskName: "test task").tabItem {
@@ -71,25 +71,61 @@ struct TestView : View {
                     Image(systemName: theTask.isComplete ? "checkmark.square" : "square")
                     Text("Mark Complete")
                 }
-                ExtractedView(isComplete: $theTask.isComplete)
+                //ExtractedView(theTask: theTask)
+                IntermediateSubView1()
             }
         }
     }
 }
 
+struct IntermediateSubView1 : View {
+    
+    var body: some View {
+        IntermediateSubView2()
+    }
+}
+
+struct IntermediateSubView2 : View {
+   
+    var body: some View {
+        IntermediateSubView3()
+    }
+}
+
+struct IntermediateSubView3 : View {
+    
+    var body: some View {
+        IntermediateSubView4()
+    }
+}
+
+struct IntermediateSubView4 : View {
+ 
+    var body: some View {
+        IntermediateSubView5()
+    }
+}
+
+struct IntermediateSubView5 : View {
+ 
+    var body: some View {
+        ExtractedView()
+    }
+}
+
 struct ExtractedView: View {
-    @Binding var isComplete: Bool
+    @EnvironmentObject var theTask: Task
     var body: some View {
         VStack{
             Button(action: {
-                isComplete = true // => IOS refresh UI (TheTask is @State)
+                theTask.isComplete = true // => IOS refresh UI (TheTask is @State)
             }){
                 Text("Mark Complete")
                 
             }.padding(.top)
             
             Button(action: {
-                isComplete = false
+                theTask.isComplete = false
             }){
                 Text("Reset")
             }.padding(.top)
@@ -99,7 +135,8 @@ struct ExtractedView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        TestView()
+        let previewTask = Task(name: "check all windows", isComplete: false)
+        TestView().environmentObject(previewTask)
     }
 }
 
