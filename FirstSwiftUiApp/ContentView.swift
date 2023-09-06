@@ -7,42 +7,65 @@
 
 import SwiftUI
 
-let nightlyTasks = [
-    "Check all doors",
-    "Check that the safe is locked",
-    "Check the mailbox",
-    "Inspect security cameras",
-    "Clear ice from sidewalks",
-    "Document \"strange and unusual\" occurrences"
-]
-
-let weeklyTasks = ["nightlyTasks","Walk the perimeter of property"]
-
-let monthlyTasks = ["Test security alarm","Test motion detectors","Test smoke alarms"]
 
 struct ContentView: View {
+    @ObservedObject var nightWatchTasks: NightWatchTasks
     var body: some View {
+        
+        // Can I hold a copy of the $ version of the nightWatchTasks instance ?
+        let refNightWatchTasks = $nightWatchTasks
+        
         NavigationView { // mise en place du system de navigation
             List{
                 Section(header: TaskSectionHeader(symbolSystemName: "moon.stars.circle", headerText: "Nightly Tasks")){
-                    ForEach(nightlyTasks,id: \.self ,content: {
-                        taskName in
-                        NavigationLink(taskName, destination: DetailsView(taskName: taskName) )
-                        // créer un lien de navigation ver une destination
+                    
+                    let tasksBinding = nightWatchTasks.nightlyTasks // tasks (NightlyTask)
+                    let tasksIndices = tasksBinding.indices // indices 0, 1, 2
+                    let taskIndexPaires =  Array(zip(tasksBinding, tasksIndices))
+                    
+                    ForEach(taskIndexPaires, id:\.0.id ,content: {
+                        task, taskIndex in
+                        
+                        let tasksBinding = refNightWatchTasks.nightlyTasks
+                        let theTaskBinding = tasksBinding[taskIndex]
+                        
+                        NavigationLink(
+                            destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
                     })
                 }
+            
                 
                 Section(header: TaskSectionHeader(symbolSystemName: "sunset", headerText: "WEEKLY TASKS")){
-                    ForEach(weeklyTasks,id: \.self ,content: {
-                        taskName in
-                        NavigationLink(taskName, destination: DetailsView(taskName: taskName))
+                    
+                    let tasksBinding = nightWatchTasks.weeklyTasks // tasks (NightlyTask)
+                    let tasksIndices = tasksBinding.indices // indices 0, 1, 2
+                    let taskIndexPaires =  Array(zip(tasksBinding, tasksIndices))
+                    
+                    ForEach(taskIndexPaires, id:\.0.id ,content: {
+                        task, taskIndex in
+                        
+                        let tasksBinding = refNightWatchTasks.weeklyTasks
+                        let theTaskBinding = tasksBinding[taskIndex]
+                        
+                        NavigationLink(
+                            destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
                     })
                 }
                 
                 Section(header:TaskSectionHeader(symbolSystemName: "calendar", headerText: "Monthly Tasks")){
-                    ForEach(monthlyTasks,id: \.self ,content: {
-                        taskName in
-                        NavigationLink(taskName, destination: DetailsView(taskName: taskName))
+                    
+                    let tasksBinding = nightWatchTasks.monthlyTasks // tasks (NightlyTask)
+                    let tasksIndices = tasksBinding.indices // indices 0, 1, 2
+                    let taskIndexPaires =  Array(zip(tasksBinding, tasksIndices))
+                    
+                    ForEach(taskIndexPaires, id:\.0.id ,content: {
+                        task, taskIndex in
+                        
+                        let tasksBinding = refNightWatchTasks.monthlyTasks
+                        let theTaskBinding = tasksBinding[taskIndex]
+                        
+                        NavigationLink(
+                            destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
                     })
                 }
             }
@@ -52,10 +75,13 @@ struct ContentView: View {
     }
 }
 
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        Group {
+            ContentView(nightWatchTasks: NightWatchTasks())
+            TaskRow(task: Task(name: "Check all doors", isComplete: true))
+                .previewLayout(.fixed(width: 300, height: 70))
+        }
     }
 }
 
@@ -71,15 +97,25 @@ struct TaskSectionHeader: View {
     }
 }
 
-struct DetailsView: View {
-    let taskName: String
+
+
+struct TaskRow: View {
+    let task: Task
     var body: some View {
         VStack{
-            Text(taskName)
-            Text("Placeholder for task description")
-            Text("Placeholder for complete button")
+            if task.isComplete {
+                HStack {
+                    Image(systemName: "checkmark.square")
+                    Text(task.name)
+                        .foregroundColor(.gray)
+                    .strikethrough()
+                }
+            }else {
+                HStack{
+                    Image(systemName: "square")
+                    Text(task.name)
+                }
+            }
         }
     }
 }
-
-

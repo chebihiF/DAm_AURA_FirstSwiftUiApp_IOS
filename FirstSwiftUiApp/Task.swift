@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Task {
+struct Task : Identifiable {
+    let id = UUID() // generate an random ID
     let name: String
     var isComplete: Bool
     var lastCompleted: Date?
