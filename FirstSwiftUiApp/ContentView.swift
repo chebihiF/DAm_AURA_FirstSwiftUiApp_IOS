@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var nightWatchTasks: NightWatchTasks
+    @State private var focusMode = false
     var body: some View {
         
         // Can I hold a copy of the $ version of the nightWatchTasks instance ?
@@ -29,8 +30,10 @@ struct ContentView: View {
                         let tasksBinding = refNightWatchTasks.nightlyTasks
                         let theTaskBinding = tasksBinding[taskIndex]
                         
-                        NavigationLink(
-                            destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
+                        if focusMode == false || (focusMode && task.isComplete == false){
+                            NavigationLink(
+                                destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
+                        }
                     })
                 }
             
@@ -47,8 +50,10 @@ struct ContentView: View {
                         let tasksBinding = refNightWatchTasks.weeklyTasks
                         let theTaskBinding = tasksBinding[taskIndex]
                         
-                        NavigationLink(
-                            destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
+                        if focusMode == false || (focusMode && task.isComplete == false){
+                            NavigationLink(
+                                destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
+                        }
                     })
                 }
                 
@@ -64,13 +69,22 @@ struct ContentView: View {
                         let tasksBinding = refNightWatchTasks.monthlyTasks
                         let theTaskBinding = tasksBinding[taskIndex]
                         
-                        NavigationLink(
-                            destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
+                        if focusMode == false || (focusMode && task.isComplete == false){
+                            NavigationLink(
+                                destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
+                        }
                     })
                 }
             }
             .listStyle(GroupedListStyle())
             .navigationTitle("Home")
+            .toolbar {
+                ToolbarItem(placement: .bottomBar ) {
+                    Toggle(isOn: $focusMode, label: {
+                        Text("Focus Mode")
+                    }).toggleStyle(SwitchToggleStyle())
+                }
+            }
         }
     }
 }
