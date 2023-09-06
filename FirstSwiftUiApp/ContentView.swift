@@ -34,7 +34,10 @@ struct ContentView: View {
                             NavigationLink(
                                 destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
                         }
+                        //Add delete event => add UI delete animation
                     })
+                    .onDelete(perform: {IndexSet in nightWatchTasks.nightlyTasks.remove(atOffsets: IndexSet)})
+                    .onMove(perform: {indices, newOffset in nightWatchTasks.nightlyTasks.move(fromOffsets: indices, toOffset: newOffset)})
                 }
             
                 
@@ -55,6 +58,8 @@ struct ContentView: View {
                                 destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
                         }
                     })
+                    .onDelete(perform: {IndexSet in nightWatchTasks.weeklyTasks.remove(atOffsets: IndexSet)})
+                    .onMove(perform: {indices, newOffset in nightWatchTasks.weeklyTasks.move(fromOffsets: indices, toOffset: newOffset)})
                 }
                 
                 Section(header:TaskSectionHeader(symbolSystemName: "calendar", headerText: "Monthly Tasks")){
@@ -74,6 +79,8 @@ struct ContentView: View {
                                 destination: DetailsView(task: theTaskBinding), label:{ TaskRow(task: task)})
                         }
                     })
+                    .onDelete(perform: {IndexSet in nightWatchTasks.monthlyTasks.remove(atOffsets: IndexSet)})
+                    .onMove(perform: {indices, newOffset in nightWatchTasks.monthlyTasks.move(fromOffsets: indices, toOffset: newOffset)})
                 }
             }
             .listStyle(GroupedListStyle())
@@ -83,6 +90,9 @@ struct ContentView: View {
                     Toggle(isOn: $focusMode, label: {
                         Text("Focus Mode")
                     }).toggleStyle(SwitchToggleStyle())
+                }
+                ToolbarItem(placement: .navigationBarTrailing){
+                    EditButton()
                 }
             }
         }
