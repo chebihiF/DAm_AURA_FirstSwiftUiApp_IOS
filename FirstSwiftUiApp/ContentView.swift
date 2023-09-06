@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var nightWatchTasks: NightWatchTasks
     @State private var focusMode = false
+    @State private var resetAlertShowing = false
     var body: some View {
         
         // Can I hold a copy of the $ version of the nightWatchTasks instance ?
@@ -94,8 +95,22 @@ struct ContentView: View {
                 ToolbarItem(placement: .navigationBarTrailing){
                     EditButton()
                 }
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button("Reset"){
+                        resetAlertShowing = true
+                    }
+                }
             }
-        }
+        }.alert(isPresented: $resetAlertShowing, content: {
+            Alert(title: Text("Reset List"), message: Text("Are you sure ??"),
+                  primaryButton: .cancel(),
+                  secondaryButton: .destructive(Text("Yes, reset It"),action:{
+                let refreshedNightWatchTasks = NightWatchTasks()
+                self.nightWatchTasks.nightlyTasks = refreshedNightWatchTasks.nightlyTasks
+                self.nightWatchTasks.weeklyTasks = refreshedNightWatchTasks.weeklyTasks
+                self.nightWatchTasks.monthlyTasks = refreshedNightWatchTasks.monthlyTasks
+            }))
+        })
     }
 }
 
